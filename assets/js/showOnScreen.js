@@ -59,6 +59,7 @@ export const showOnScreen = () => {
 			if (isOperatorPressed) {
 				isOperatorPressed = false;
 				screen.textContent = '';
+				counter = 0;
 			}
 
 			if (counter<10) {
@@ -73,14 +74,18 @@ export const showOnScreen = () => {
 		operator.addEventListener('click', () => {
 			isOperatorPressed = true; 
 			
-			// ° controlar validacion para asignar resultado en firstValue
-
-			(firstValue === 0)
-				? firstValue = Number(screen.textContent)
-				: secondValue = Number(screen.textContent);
-
+			if(firstValue === 0){
+				firstValue = Number(screen.textContent)
+			} else {
+				if(isEqualPressed === false) secondValue = Number(screen.textContent);
+			}
+			
+			if(isEqualPressed){
+				firstValue = Number(screen.textContent);
+			}
+			
 			secondScreen.textContent = firstValue +' '+ operator.textContent;
-
+			
 			if (operator.textContent === '=') {
 				isEqualPressed = true;
 			}
@@ -94,6 +99,10 @@ export const showOnScreen = () => {
 	});
 	
 	clearButton.addEventListener('click', () => {
+		if (isEqualPressed) {
+			formatAll();
+		}
+		
 		arrNumbersOnScreen = [];
 		screen.textContent = arrNumbersOnScreen.join('');
 		counter = 0;

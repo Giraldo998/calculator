@@ -37,7 +37,7 @@ export const showOnScreen = () => {
 	let isEqualPressed = false;
 	let counter = 0;
 	
-	const formatAll =()=>{
+	const formatAll = () =>{
 		arrNumbersOnScreen = [];
 		screen.textContent = arrNumbersOnScreen.join('');
 		secondScreen.textContent = '';
@@ -46,16 +46,41 @@ export const showOnScreen = () => {
 		isEqualPressed = false;
 		counter = 0;
 	}
+	const plusMinus = () =>{
+		
+	}
 
 	numbers.map((number) => {
 		screen.textContent = arrNumbersOnScreen;
-
+		
 		number.addEventListener('click', () => {			
 			
-			if (isEqualPressed) {
-				formatAll();
+			if (isEqualPressed) formatAll();
+			
+			if (isOperatorPressed) {
+				isOperatorPressed = false;
+				screen.textContent = '';
+				counter = 0;
 			}
+			
+			if (counter<10) {
+				counter ++;
+				screen.textContent += number.textContent;
+				arrNumbersOnScreen = [...screen.textContent];
+			}
+			console.log(isOperatorPressed);
+			console.log(arrNumbersOnScreen);
+		});
 
+	});
+
+	document.addEventListener('keydown', (number) => {
+		const key = number.key;
+		
+		if (!isNaN(key) || key === '.') {
+
+			if (isEqualPressed) formatAll();
+			
 			if (isOperatorPressed) {
 				isOperatorPressed = false;
 				screen.textContent = '';
@@ -63,21 +88,26 @@ export const showOnScreen = () => {
 			}
 
 			if (counter<10) {
-				counter++;
-				screen.textContent += number.textContent;
-				arrNumbersOnScreen = [...screen.textContent];
+				counter ++;
+				screen.textContent += key;
+				arrNumbersOnScreen.push(key);
 			}
-		});
+		}
 	});
 
 	mathOperators.map((operator) => {
 		operator.addEventListener('click', () => {
-			isOperatorPressed = true; 
 			
-			if(firstValue === 0){
+			
+			if(firstValue === 0 ){
 				firstValue = Number(screen.textContent)
+				console.log('frist',isEqualPressed); 
+				console.log(firstValue);
 			} else {
 				if(isEqualPressed === false) secondValue = Number(screen.textContent);
+				console.log('second',isEqualPressed); 
+				console.log(secondValue);
+				
 			}
 			
 			if(isEqualPressed){
@@ -88,7 +118,12 @@ export const showOnScreen = () => {
 			
 			if (operator.textContent === '=') {
 				isEqualPressed = true;
-			}
+				isOperatorPressed = false;
+			}else{
+				isOperatorPressed = true;
+				isEqualPressed = false;
+			}	
+			
 		});
 	});
 
@@ -96,13 +131,14 @@ export const showOnScreen = () => {
 		arrNumbersOnScreen.splice(-1, 1);
 		screen.textContent = arrNumbersOnScreen.join('');
 		counter --;
+		if (isEqualPressed) secondScreen.textContent = '';
 	});
 	
 	clearButton.addEventListener('click', () => {
 		if (isEqualPressed) {
 			formatAll();
 		}
-		
+
 		arrNumbersOnScreen = [];
 		screen.textContent = arrNumbersOnScreen.join('');
 		counter = 0;

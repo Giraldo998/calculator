@@ -1,4 +1,3 @@
-
 const numbers = [
 	document.getElementById('btn-0'),
 	document.getElementById('btn-1'),
@@ -30,114 +29,126 @@ export const screen = document.getElementById('screen'),
 export let firstValue = 0;
 export let secondValue = 0;
 
-
 export const showOnScreen = () => {
 	let arrNumbersOnScreen = [];
 	let isOperatorPressed = false;
 	let isEqualPressed = false;
 	let counter = 0;
-	
-	const formatAll = () =>{
+
+	const formatAll = () => {
 		arrNumbersOnScreen = [];
-		screen.textContent = arrNumbersOnScreen.join('');
+		screen.textContent = '';
 		secondScreen.textContent = '';
 		firstValue = 0;
 		secondValue = 0;
 		isEqualPressed = false;
 		counter = 0;
-	}
-	const plusMinus = () =>{
-		
-	}
+	};
 
-	numbers.map((number) => {
-		screen.textContent = arrNumbersOnScreen;
+	const handleNumberInput = (number)=>{
+
+		if (isEqualPressed) formatAll();
+
+		if (isOperatorPressed) {
+			isOperatorPressed = false;
+			screen.textContent = '';
+			counter = 0;
+		}
+
+		if (counter < 10) {
+			counter++;
+			screen.textContent += number;
+			arrNumbersOnScreen.push(number);
+		}
+		console.log(arrNumbersOnScreen);
 		
-		number.addEventListener('click', () => {			
+	};
+
+	const handleOperatorInput = (operator)=>{
+
+		if (firstValue === 0) {
+
+			firstValue = Number(screen.textContent);
+		
+		} else {
 			
-			if (isEqualPressed) formatAll();
+			if (isEqualPressed === false) secondValue = Number(screen.textContent);
+		}
+
+		if (isEqualPressed) {
 			
-			if (isOperatorPressed) {
-				isOperatorPressed = false;
-				screen.textContent = '';
-				counter = 0;
-			}
+			firstValue = Number(screen.textContent);
+		}
+
+		secondScreen.textContent = `${firstValue} ${operator}` ;
+
+		if (operator === '=' || operator === 'Enter') {
+			isEqualPressed = true;
+			isOperatorPressed = false;
+		} else {
+			isOperatorPressed = true;
+			isEqualPressed = false;
+		}
+	};
+	
+	const handleDeleteButton = ()=>{
+
+		arrNumbersOnScreen.pop();
+		screen.textContent = arrNumbersOnScreen.join('');
+		counter--;
+
+		if (isEqualPressed) secondScreen.textContent = '';
+		console.log(arrNumbersOnScreen);
+		
+	};
+
+	numbers.forEach((number) => {
+		number.addEventListener('click', () => {
+
+			handleNumberInput(number.textContent);
 			
-			if (counter<10) {
-				counter ++;
-				screen.textContent += number.textContent;
-				arrNumbersOnScreen = [...screen.textContent];
-			}
-			console.log(isOperatorPressed);
-			console.log(arrNumbersOnScreen);
 		});
-
 	});
 
-	document.addEventListener('keydown', (number) => {
+	document.addEventListener('keyup', (number) => {
 		const key = number.key;
-		
+
 		if (!isNaN(key) || key === '.') {
-
-			if (isEqualPressed) formatAll();
 			
-			if (isOperatorPressed) {
-				isOperatorPressed = false;
-				screen.textContent = '';
-				counter = 0;
-			}
+			handleNumberInput(key);
 
-			if (counter<10) {
-				counter ++;
-				screen.textContent += key;
-				arrNumbersOnScreen.push(key);
-			}
 		}
 	});
 
-	mathOperators.map((operator) => {
+	mathOperators.forEach((operator) => {
 		operator.addEventListener('click', () => {
 			
-			
-			if(firstValue === 0 ){
-				firstValue = Number(screen.textContent)
-				console.log('frist',isEqualPressed); 
-				console.log(firstValue);
-			} else {
-				if(isEqualPressed === false) secondValue = Number(screen.textContent);
-				console.log('second',isEqualPressed); 
-				console.log(secondValue);
-				
-			}
-			
-			if(isEqualPressed){
-				firstValue = Number(screen.textContent);
-			}
-			
-			secondScreen.textContent = firstValue +' '+ operator.textContent;
-			
-			if (operator.textContent === '=') {
-				isEqualPressed = true;
-				isOperatorPressed = false;
-			}else{
-				isOperatorPressed = true;
-				isEqualPressed = false;
-			}	
-			
+			handleOperatorInput(operator.textContent);
+		
 		});
+	});
+
+	document.addEventListener('keyup', (operator) => {
+		const key = operator.key;
+
+		if (['+', '-', '*', '/', '=', 'Enter'].includes(key)) {
+			handleOperatorInput(key)
+		}
 	});
 
 	deleteButton.addEventListener('click', () => {
-		arrNumbersOnScreen.splice(-1, 1);
-		screen.textContent = arrNumbersOnScreen.join('');
-		counter --;
-		if (isEqualPressed) secondScreen.textContent = '';
+		handleDeleteButton();
 	});
-	
-	clearButton.addEventListener('click', () => {
-		if (isEqualPressed) {
-			formatAll();
+
+	document.addEventListener('keydown', (button) => {
+		
+		if (button.key === 'Backspace') {
+			handleDeleteButton();
 		}
+	});
+
+	clearButton.addEventListener('click', () => {
+		if (isEqualPressed) formatAll();
 
 		arrNumbersOnScreen = [];
 		screen.textContent = arrNumbersOnScreen.join('');
@@ -146,6 +157,10 @@ export const showOnScreen = () => {
 
 	clearAllButton.addEventListener('click', () => {
 		formatAll();
+	});
+
+	document.addEventListener('keyup', (button) => {
+		if (button.key === 'Escape') formatAll();
 	});
 };
 

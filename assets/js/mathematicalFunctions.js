@@ -54,7 +54,7 @@ export const mathematicalFunctions = () => {
 			}
 		}
 
-		if (operator === 'x') {
+		if (operator === 'x' || operator === '*') {
 			mat = 'x';
 			operatorCountMult ++;
 			operatorCountPlus = 0;
@@ -69,7 +69,7 @@ export const mathematicalFunctions = () => {
 			}
 		}
 
-		if (operator === '÷') {
+		if (operator === '÷' || operator === '/') {
 			mat = '/';
 			operatorCountDiv ++;
 			operatorCountPlus = 0;

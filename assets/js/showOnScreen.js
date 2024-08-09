@@ -10,6 +10,7 @@ const numbers = [
 	document.getElementById('btn-8'),
 	document.getElementById('btn-9'),
 	document.getElementById('decimalPoint'),
+	document.getElementById('plusMinus'),
 ];
 
 export const mathOperators = [
@@ -20,14 +21,16 @@ export const mathOperators = [
 	document.getElementById('equal'),
 ];
 
+
 export const screen = document.getElementById('screen'),
-	secondScreen = document.getElementById('opScreen'),
-	deleteButton = document.getElementById('delete'),
-	clearAllButton = document.getElementById('clearAll'),
-	clearButton = document.getElementById('clear');
+secondScreen = document.getElementById('opScreen'),
+deleteButton = document.getElementById('delete'),
+clearAllButton = document.getElementById('clearAll'),
+clearButton = document.getElementById('clear');
 
 export let firstValue = 0;
 export let secondValue = 0;
+
 
 export const showOnScreen = () => {
 	let arrNumbersOnScreen = [];
@@ -44,24 +47,32 @@ export const showOnScreen = () => {
 		isEqualPressed = false;
 		counter = 0;
 	};
-
+	
 	const handleNumberInput = (number)=>{
-
+		
 		if (isEqualPressed) formatAll();
-
+		
 		if (isOperatorPressed) {
 			isOperatorPressed = false;
 			screen.textContent = '';
 			counter = 0;
 		}
 
+		if (number === '±') {
+			
+			if (screen.textContent !== '') {
+				screen.textContent = parseFloat(screen.textContent) * -1;				
+			}
+		}
+		
 		if (counter < 10) {
 			counter++;
-			screen.textContent += number;
-			arrNumbersOnScreen.push(number);
+			
+			if(number!=='±') {
+				screen.textContent += number ;	
+				arrNumbersOnScreen.push(number);
+			}			
 		}
-		console.log(arrNumbersOnScreen);
-		
 	};
 
 	const handleOperatorInput = (operator)=>{
@@ -98,8 +109,6 @@ export const showOnScreen = () => {
 		counter--;
 
 		if (isEqualPressed) secondScreen.textContent = '';
-		console.log(arrNumbersOnScreen);
-		
 	};
 
 	numbers.forEach((number) => {
@@ -116,7 +125,6 @@ export const showOnScreen = () => {
 		if (!isNaN(key) || key === '.') {
 			
 			handleNumberInput(key);
-
 		}
 	});
 

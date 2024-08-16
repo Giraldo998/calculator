@@ -1,0 +1,1 @@
+Calculdora sencilla inspirada en la calculadora de Windows.

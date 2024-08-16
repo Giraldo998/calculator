@@ -7,7 +7,7 @@ import {
 	setFirstValue,
 } from './showOnScreen.js';
 
-let mat = undefined;
+let currentOperator = undefined;
 let result = 0;
 let operatorCountPlus = 0;
 let operatorCountMinus = 0;
@@ -25,7 +25,7 @@ export const mathematicalFunctions = () => {
 
 	const handleMathematicalFunctions = (operator)=>{
 		if (operator === '+') {
-			mat = '+';
+			currentOperator = '+';
 			operatorCountPlus ++;
 			operatorCountMinus = 0;
 			operatorCountMult = 0;
@@ -40,7 +40,7 @@ export const mathematicalFunctions = () => {
 		}
 
 		if (operator === '-') {
-			mat = '-';
+			currentOperator = '-';
 			operatorCountMinus ++;
 			operatorCountPlus = 0;
 			operatorCountMult = 0;
@@ -55,7 +55,7 @@ export const mathematicalFunctions = () => {
 		}
 
 		if (operator === 'x' || operator === '*') {
-			mat = 'x';
+			currentOperator = 'x';
 			operatorCountMult ++;
 			operatorCountPlus = 0;
 			operatorCountMinus = 0;
@@ -64,13 +64,13 @@ export const mathematicalFunctions = () => {
 			if ( firstValue !== 0 && secondValue !== 0 && operatorCountMult >= 2 ) {
 				result = roundResult(firstValue * secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${screen.textContent} ${operator}`;
+				secondScreen.textContent = `${screen.textContent} x`;
 				setFirstValue(result);
 			}
 		}
 
 		if (operator === '÷' || operator === '/') {
-			mat = '/';
+			currentOperator = '/';
 			operatorCountDiv ++;
 			operatorCountPlus = 0;
 			operatorCountMinus = 0;
@@ -79,7 +79,7 @@ export const mathematicalFunctions = () => {
 			if ( firstValue !== 0 && secondValue !== 0 && operatorCountDiv >= 2 ) {
 				result = roundResult(firstValue / secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${screen.textContent} ${operator}`;
+				secondScreen.textContent = `${screen.textContent} ÷`;
 				setFirstValue(result);
 			}
 		}
@@ -90,28 +90,28 @@ export const mathematicalFunctions = () => {
 			operatorCountMinus = 0;
 			operatorCountMult = 0;
 			
-			if (mat === '+') {
+			if (currentOperator === '+') {
 				result = roundResult(firstValue + secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${firstValue} ${mat} ${secondValue} =`;
+				secondScreen.textContent = `${firstValue} ${currentOperator} ${secondValue} =`;
 			}
 
-			if (mat === '-') {
+			if (currentOperator === '-') {
 				result = roundResult(firstValue - secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${firstValue} ${mat} ${secondValue} =`;
+				secondScreen.textContent = `${firstValue} ${currentOperator} ${secondValue} =`;
 			}
 
-			if (mat === 'x') {
+			if (currentOperator === 'x') {
 				result = roundResult(firstValue * secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${firstValue} ${mat} ${secondValue} =`;
+				secondScreen.textContent = `${firstValue} x ${secondValue} =`;
 			}
 
-			if (mat === '/') {
+			if (currentOperator === '/') {
 				result = roundResult(firstValue / secondValue, 8);
 				screen.textContent = result;
-				secondScreen.textContent = `${firstValue} ${mat} ${secondValue} =`;
+				secondScreen.textContent = `${firstValue} ÷ ${secondValue} =`;
 			}
 		}
 	};

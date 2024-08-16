@@ -71,7 +71,6 @@ export const showOnScreen = () => {
 
 			if(number!=='±') {	
 				screen.textContent += number ;
-				screen.textContent.replace(/\D/g, '')
 				arrNumbersOnScreen = [...screen.textContent];
 			}			
 		}

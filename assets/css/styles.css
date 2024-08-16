@@ -92,3 +92,10 @@ body {
 .action:hover{
 	background-color: #3b3b3b;
 }
+.action .material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 0,
+  'GRAD' 120,
+  'opsz' 24
+}

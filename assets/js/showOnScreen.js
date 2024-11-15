@@ -1,5 +1,3 @@
-import { result } from "./index.js";
-
 const numbers = [
 	document.getElementById('btn-0'),
 	document.getElementById('btn-1'),
@@ -14,6 +12,7 @@ const numbers = [
 	document.getElementById('decimalPoint'),
 	document.getElementById('plusMinus'),
 ];
+
 export const mathOperators = [
 	document.getElementById('add'),
 	document.getElementById('substract'),

@@ -5,25 +5,27 @@ import {
 	screen,
 	secondScreen,
 	setFirstValue,
+	formatValues,
 } from './showOnScreen.js';
 
 let currentOperator = undefined;
-let result = 0;
 let operatorCountPlus = 0;
 let operatorCountMinus = 0;
 let operatorCountMult = 0;
 let operatorCountDiv = 0;
+export let result = 0;
 
 
 export const mathematicalFunctions = () => {
 	
 	const roundResult = (num, decimals = 1) => {
-		
 		const factor = Math.pow(10, decimals);
 		return Math.round(num * factor) / factor;
+
 	};
 
 	const handleMathematicalFunctions = (operator)=>{
+		
 		if (operator === '+') {
 			currentOperator = '+';
 			operatorCountPlus ++;
@@ -31,7 +33,7 @@ export const mathematicalFunctions = () => {
 			operatorCountMult = 0;
 			operatorCountDiv = 0;
 
-			if ( firstValue !== 0 && secondValue !== 0 && operatorCountPlus >= 2 ) {
+			if (firstValue !== NaN && secondValue!== NaN && operatorCountPlus >= 2 ) {
 				result = roundResult(firstValue + secondValue, 8);
 				screen.textContent = result;
 				secondScreen.textContent = `${screen.textContent} ${operator}`;
@@ -46,7 +48,7 @@ export const mathematicalFunctions = () => {
 			operatorCountMult = 0;
 			operatorCountDiv = 0;
 
-			if ( firstValue !== 0 && secondValue !== 0 && operatorCountMinus >= 2 ) {
+			if ( firstValue !== NaN && secondValue!== NaN && operatorCountMinus >= 2 ) {
 				result = roundResult(firstValue - secondValue, 8);
 				screen.textContent = result;
 				secondScreen.textContent = `${screen.textContent} ${operator}`;
@@ -61,7 +63,7 @@ export const mathematicalFunctions = () => {
 			operatorCountMinus = 0;
 			operatorCountDiv = 0;
 
-			if ( firstValue !== 0 && secondValue !== 0 && operatorCountMult >= 2 ) {
+			if ( firstValue !== NaN && secondValue!== NaN && operatorCountMult >= 2 ) {
 				result = roundResult(firstValue * secondValue, 8);
 				screen.textContent = result;
 				secondScreen.textContent = `${screen.textContent} x`;
@@ -76,7 +78,7 @@ export const mathematicalFunctions = () => {
 			operatorCountMinus = 0;
 			operatorCountMult = 0;
 
-			if ( firstValue !== 0 && secondValue !== 0 && operatorCountDiv >= 2 ) {
+			if ( firstValue !== NaN && secondValue!== NaN && operatorCountDiv >= 2 ) {
 				result = roundResult(firstValue / secondValue, 8);
 				screen.textContent = result;
 				secondScreen.textContent = `${screen.textContent} ÷`;
@@ -84,12 +86,12 @@ export const mathematicalFunctions = () => {
 			}
 		}
 
-		if (operator === '=' || operator==='Enter') {
+		if (operator === '=' || operator === 'Enter') {
 			operatorCountDiv = 0;
 			operatorCountPlus = 0;
 			operatorCountMinus = 0;
 			operatorCountMult = 0;
-			
+
 			if (currentOperator === '+') {
 				result = roundResult(firstValue + secondValue, 8);
 				screen.textContent = result;
@@ -113,7 +115,18 @@ export const mathematicalFunctions = () => {
 				screen.textContent = result;
 				secondScreen.textContent = `${firstValue} ÷ ${secondValue} =`;
 			}
+			
+			if(!currentOperator){
+				screen.textContent = result;
+				secondScreen.textContent = `${(screen.textContent === '') ? 0 : screen.textContent} =`;
+			}			
 		}
+		
+		if (result === 0) {
+			formatValues();
+		}
+		
+		result = screen.textContent
 	};
 
 	mathOperators.forEach((operator) => {

@@ -1,3 +1,5 @@
+import { result } from "./index.js";
+
 const numbers = [
 	document.getElementById('btn-0'),
 	document.getElementById('btn-1'),
@@ -12,7 +14,6 @@ const numbers = [
 	document.getElementById('decimalPoint'),
 	document.getElementById('plusMinus'),
 ];
-
 export const mathOperators = [
 	document.getElementById('add'),
 	document.getElementById('substract'),
@@ -20,7 +21,6 @@ export const mathOperators = [
 	document.getElementById('divide'),
 	document.getElementById('equal'),
 ];
-
 
 export const screen = document.getElementById('screen'),
 	secondScreen = document.getElementById('opScreen'),
@@ -31,13 +31,91 @@ export const screen = document.getElementById('screen'),
 export let firstValue = 0;
 export let secondValue = 0;
 
+export const formatValues = ()=>{
+	firstValue = 0
+	secondValue = 0
+} 
 
 export const showOnScreen = () => {
-
 	let arrNumbersOnScreen = [];
 	let isOperatorPressed = false;
 	let isEqualPressed = false;
 	let counter = 0;
+
+	const handleNumberInput = (number) => {
+		if (number !== '±') {
+			if (isEqualPressed) formatAll();
+
+			if (isOperatorPressed) {
+				isOperatorPressed = false;
+				screen.textContent = '';
+				counter = 0;
+			}
+
+			if (counter < 10) {
+				counter++;
+				screen.textContent += number;
+				arrNumbersOnScreen = [...screen.textContent];
+			}
+
+		} else {
+			if (screen.textContent !== '') {
+				screen.textContent = parseFloat(screen.textContent) * -1;
+			}
+		}
+	};
+
+	const handleOperatorInput = (operator) => {
+		
+		if (firstValue===0) {
+			firstValue = parseFloat(screen.textContent);
+
+		} else {
+			if (!isEqualPressed) secondValue = parseFloat(screen.textContent);
+		}
+		
+		if (isEqualPressed) {
+			firstValue = parseFloat(screen.textContent);
+
+			if (secondValue===0 && firstValue!==0) {
+				secondValue = parseFloat(screen.textContent);
+			}
+		}
+
+		if (operator === '/' || operator === '÷') {
+			secondScreen.textContent = `${firstValue} ÷`;
+			
+		} else {
+			if (operator === '*' || operator === 'x') {
+				secondScreen.textContent = `${firstValue} x`;
+			
+			} else {
+				secondScreen.textContent = `${firstValue} ${operator}`;
+			}
+		}
+
+		if (operator === '=' || operator === 'Enter') {
+			isEqualPressed = true;
+			isOperatorPressed = false;
+			
+		} else {
+			isOperatorPressed = true;
+			isEqualPressed = false;
+		}
+	};
+
+	const handleDeleteButton = () => {
+		if (isEqualPressed) {
+			secondScreen.textContent = '';
+			
+		} else {
+			if (!isOperatorPressed) {
+				arrNumbersOnScreen.pop();
+				screen.textContent = arrNumbersOnScreen.join('');
+				counter--;
+			}
+		}
+	};
 
 	const formatAll = () => {
 		arrNumbersOnScreen = [];
@@ -46,97 +124,13 @@ export const showOnScreen = () => {
 		firstValue = 0;
 		secondValue = 0;
 		isEqualPressed = false;
+		isOperatorPressed = false;
 		counter = 0;
-	};
-
-	const handleNumberInput = (number)=>{
-				
-		if (isEqualPressed) formatAll();
-		
-		if (isOperatorPressed) {
-			isOperatorPressed = false;	
-			screen.textContent = '';
-			counter = 0;
-		}
-
-		if (number === '±') {
-			
-			if (screen.textContent !== '') {
-				screen.textContent = parseFloat(screen.textContent) * -1;				
-			}
-		}
-		
-		if (counter < 10) {
-			counter++;
-
-			if(number!=='±') {	
-				screen.textContent += number ;
-				arrNumbersOnScreen = [...screen.textContent];
-			}			
-		}
-	};
-
-	const handleOperatorInput = (operator)=>{
-
-		if (firstValue === 0) {
-
-			firstValue = Number(screen.textContent);
-
-		} else {
-			
-			if (!isEqualPressed) secondValue = Number(screen.textContent);
-		}
-
-		if (isEqualPressed) {
-			
-			firstValue = Number(screen.textContent);
-		}
-		
-		if (operator === '/' || operator === '÷') {
-			
-			secondScreen.textContent = `${firstValue} ÷` ;
-			
-		} else {	
-			
-			if (operator === '*' || operator=== 'x') {
-				
-				secondScreen.textContent = `${firstValue} x` ;
-				
-			} else {
-	
-				secondScreen.textContent = `${firstValue} ${operator}` ;
-			}	
-		}
-
-		if (operator === '=' || operator === 'Enter') {
-			isEqualPressed = true;
-			isOperatorPressed = false;
-		} else {
-			isOperatorPressed = true;
-			isEqualPressed = false;
-		}
-	};
-	
-	const handleDeleteButton = () => {
-
-		if (isEqualPressed) {
-			secondScreen.textContent = '';
-
-		} else {
-
-			if(!isOperatorPressed){
-				arrNumbersOnScreen.pop();
-				screen.textContent = arrNumbersOnScreen.join('');
-				counter--;
-			}
-		}
 	};
 
 	numbers.forEach((number) => {
 		number.addEventListener('click', () => {
-
 			handleNumberInput(number.textContent);
-			
 		});
 	});
 
@@ -144,16 +138,13 @@ export const showOnScreen = () => {
 		const key = number.key;
 
 		if (!isNaN(key) || key === '.') {
-			
 			handleNumberInput(key);
 		}
 	});
 
 	mathOperators.forEach((operator) => {
 		operator.addEventListener('click', () => {
-			
 			handleOperatorInput(operator.textContent);
-		
 		});
 	});
 
@@ -170,7 +161,6 @@ export const showOnScreen = () => {
 	});
 
 	document.addEventListener('keydown', (button) => {
-		
 		if (button.key === 'Backspace') {
 			handleDeleteButton();
 		}

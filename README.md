@@ -1,1 +1,1 @@
-Calculdora sencilla inspirada en la calculadora de Windows.
+Calculdora básica basada en la calculadora de Windows.
